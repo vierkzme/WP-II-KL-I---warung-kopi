@@ -9,7 +9,63 @@ class Menu extends CI_Controller
         // cek_login();
     }
 
+    // Manajemen Menu
+    public function index()
+    {
+        $data['judul'] = 'Data Menu';
+        $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
+        $data['menu'] = $this->ModelMenu->getMenu()->result_array();
+        $data['kategori'] = $this->ModelMenu->getKategori()->result_array();
 
+        $data['sidebar_menu'] = [
+            ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
+            ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
+            ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
+            ['title' => 'Data Anggota', 'url' => 'user/anggota', 'icon' => 'fa fa-fw fa-user']
+        ];
+
+
+        $this->form_validation->set_rules('nama_menu', 'Nama Menu', 'required|min_length[3]', [
+            'required' => 'Nama Menu harus diisi',
+            'min_length' => 'Judul menu terlalu pendek'
+        ]);
+        $this->form_validation->set_rules('terjual', 'Terjual', 'required', [
+            'required' => 'Total Terjual harus diisi',
+        ]);
+
+        // Konfigurasi sebelum gambar diupload
+        $config['upload_path'] = './assets/img/upload/';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = '3000';
+        $config['max_width'] = '1024';
+        $config['max_height'] = '1000';
+        $config['file_name'] = 'img' . time();
+        $this->load->library('upload', $config);
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('menu/index', $data);
+            $this->load->view('templates/footer');
+        } else {
+            if ($this->upload->do_upload('image')) {
+                $image = $this->upload->data();
+                $gambar = $image['file_name'];
+            } else {
+                $gambar = '';
+            }
+            $data = [
+                'nama_menu' => $this->input->post('nama_menu', true),
+                'id' => $this->input->post('id', true),
+                'id_kategori' => $this->input->post('id_kategori', true),
+                'terjual' => $this->input->post('terjual', true),
+                'image' => $gambar
+            ];
+            $this->ModelMenu->simpanMenu($data);
+            redirect('menu');
+        }
+    }
     public function kategori()
     {
         $data['judul'] = 'Kategori Menu';
@@ -90,64 +146,6 @@ class Menu extends CI_Controller
         $where = ['id' => $this->uri->segment(3)];
         $this->ModelMenu->hapusKategori($where);
         redirect('menu/kategori');
-    }
-
-    // Manajemen Menu
-    public function index()
-    {
-        $data['judul'] = 'Data Menu';
-        $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['menu'] = $this->ModelMenu->getMenu()->result_array();
-        $data['kategori'] = $this->ModelMenu->getKategori()->result_array();
-
-        $data['sidebar_menu'] = [
-            ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
-            ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
-            ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
-            ['title' => 'Data Anggota', 'url' => 'user/anggota', 'icon' => 'fa fa-fw fa-user']
-        ];
-
-
-        $this->form_validation->set_rules('nama_menu', 'Nama Menu', 'required|min_length[3]', [
-            'required' => 'Nama Menu harus diisi',
-            'min_length' => 'Judul menu terlalu pendek'
-        ]);
-        $this->form_validation->set_rules('terjual', 'Terjual', 'required', [
-            'required' => 'Total Terjual harus diisi',
-        ]);
-
-        // Konfigurasi sebelum gambar diupload
-        $config['upload_path'] = './assets/img/upload/';
-        $config['allowed_types'] = 'jpg|png|jpeg';
-        $config['max_size'] = '3000';
-        $config['max_width'] = '1024';
-        $config['max_height'] = '1000';
-        $config['file_name'] = 'img' . time();
-        $this->load->library('upload', $config);
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('menu/index', $data);
-            $this->load->view('templates/footer');
-        } else {
-            if ($this->upload->do_upload('image')) {
-                $image = $this->upload->data();
-                $gambar = $image['file_name'];
-            } else {
-                $gambar = '';
-            }
-            $data = [
-                'nama_menu' => $this->input->post('nama_menu', true),
-                'id' => $this->input->post('id', true),
-                'id_kategori' => $this->input->post('id_kategori', true),
-                'terjual' => $this->input->post('terjual', true),
-                'image' => $gambar
-            ];
-            $this->ModelMenu->simpanMenu($data);
-            redirect('menu');
-        }
     }
 
     public function ubahMenu()
