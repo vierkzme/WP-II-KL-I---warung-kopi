@@ -14,7 +14,7 @@ class Admin extends CI_Controller
         $data['anggota'] = $this->ModelUser->getUserLimit()->result_array();
         $data['menu'] = $this->ModelMenu->getMenu()->result_array();
 
-        $data['sidebar_menu'] = [
+        $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
             ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],

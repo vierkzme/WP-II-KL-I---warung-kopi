@@ -11,7 +11,7 @@
     <hr class="sidebar-divider">
 
     <!-- Looping Menu -->
-    <?php foreach ($sidebar_menu as $menu) : ?>
+    <?php foreach ($menu_sidebar as $menu) : ?>
         <li class="nav-item <?= uri_string() == $menu['url'] ? 'active' : '' ?>">
             <a class="nav-link pb-0" href="<?= base_url($menu['url']); ?>">
                 <i class="<?= $menu['icon']; ?>"></i>

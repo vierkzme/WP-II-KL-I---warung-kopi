@@ -8,7 +8,7 @@ class Menu extends CI_Controller
         parent::__construct();
         // cek_login();
     }
-  
+
     // Manajemen Menu
     public function index()
     {
@@ -17,7 +17,7 @@ class Menu extends CI_Controller
         $data['menu'] = $this->ModelMenu->getMenu()->result_array();
         $data['kategori'] = $this->ModelMenu->getKategori()->result_array();
 
-        $data['sidebar_menu'] = [
+        $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
             ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
@@ -66,23 +66,18 @@ class Menu extends CI_Controller
             redirect('menu');
         }
     }
-
-    
-
     public function kategori()
     {
         $data['judul'] = 'Kategori Menu';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
         $data['kategori'] = $this->ModelMenu->getKategori()->result_array();
 
-
-        $data['sidebar_menu'] = [
+        $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
             ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Anggota', 'url' => 'user/anggota', 'icon' => 'fa fa-fw fa-user']
         ];
-
 
 
         $this->form_validation->set_rules('kategori', 'Kategori', 'required', [
@@ -108,17 +103,14 @@ class Menu extends CI_Controller
     {
         $data['judul'] = 'Ubah Data Kategori';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['kategori'] = $this->ModelMenu->kategoriWhere(['id' => $this->uri->segment(3)])->result_array();
+        $data['kategori'] = $this->ModelMenu->kategoriWhere(['id_kategori' => $this->uri->segment(3)])->result_array();
 
-        $data['sidebar_menu'] = [
+        $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
             ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Anggota', 'url' => 'user/anggota', 'icon' => 'fa fa-fw fa-user']
         ];
-        $data['kategori'] = $this->ModelMenu->kategoriWhere(['id_kategori' => $this->uri->segment(3)])->result_array();
-
-
 
 
         $this->form_validation->set_rules('kategori', 'Nama Kategori', 'required|min_length[3]', [
@@ -138,7 +130,6 @@ class Menu extends CI_Controller
                 'kategori' => $this->input->post('kategori', true)
             ];
 
-            $this->ModelMenu->updateKategori(['id' => $this->input->post('id')], $data);
             $this->ModelMenu->updateKategori(['id_kategori' => $this->input->post('id_kategori')], $data);
             $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Kategori Berhasil diupdate </div>');
             redirect('menu/kategori');
@@ -150,7 +141,6 @@ class Menu extends CI_Controller
         $this->ModelMenu->hapusMenu($where);
         redirect('menu');
     }
-    
     public function hapusKategori()
     {
         $where = ['id_kategori' => $this->uri->segment(3)];
@@ -165,7 +155,7 @@ class Menu extends CI_Controller
         $data['menu'] = $this->ModelMenu->menuWhere(['id' => $this->uri->segment(3)])->result_array();
         $data['kategori'] = $this->ModelMenu->getKategori()->result_array();
 
-        $data['sidebar_menu'] = [
+        $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
             ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
@@ -175,8 +165,8 @@ class Menu extends CI_Controller
 
         $kategori = $this->ModelMenu->joinKategoriMenu(['menu.id' => $this->uri->segment(3)])->result_array();
         foreach ($kategori as $k) {
-            $data['id'] = $k['id'];
-            $data['k'] = $k['kategori'];
+            $data['id'] = $k['id_kategori'];
+            $data['k'] = $k['id_kategori'];
         }
 
         $data['kategori'] = $this->ModelMenu->getKategori()->result_array();
@@ -226,5 +216,4 @@ class Menu extends CI_Controller
             redirect('menu');
         }
     }
-    
 }

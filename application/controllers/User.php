@@ -12,7 +12,7 @@ class User extends CI_Controller
         $data['judul'] = 'Profil Saya';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
 
-        $data['sidebar_menu'] = [
+        $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
             ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
@@ -33,7 +33,7 @@ class User extends CI_Controller
         // $this->db->where('role_id', 1);
         // $data['anggota'] = $this->db->get('user')->result_array();
 
-        $data['sidebar_menu'] = [
+        $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
             ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
@@ -61,7 +61,7 @@ class User extends CI_Controller
             ]
         );
 
-        $data['sidebar_menu'] = [
+        $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
             ['title' => 'Kategori Menu', 'url' => 'menu/kategori', 'icon' => 'fas fa-fw fa-table'],
             ['title' => 'Data Menu', 'url' => 'menu', 'icon' => 'fas fa-fw fa-table'],
