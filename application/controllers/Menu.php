@@ -150,9 +150,6 @@ class Menu extends CI_Controller
         $this->ModelMenu->hapusMenu($where);
         redirect('menu');
     }
-    public function hapusKategori()
-    {
-        $where = ['id' => $this->uri->segment(3)];
     
     public function hapusKategori()
     {
