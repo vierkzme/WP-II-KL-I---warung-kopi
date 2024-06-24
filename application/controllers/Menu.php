@@ -6,7 +6,7 @@ class Menu extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        // cek_login();
+        cek_login();
     }
 
     // Manajemen Menu
@@ -103,7 +103,7 @@ class Menu extends CI_Controller
     {
         $data['judul'] = 'Ubah Data Kategori';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['kategori'] = $this->ModelMenu->kategoriWhere(['id_kategori' => $this->uri->segment(3)])->result_array();
+        $data['kategori'] = $this->ModelMenu->kategoriWhere(['id' => $this->uri->segment(3)])->result_array();
 
         $data['menu_sidebar'] = [
             ['title' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-fw fa-tachometer-alt'],
@@ -130,7 +130,7 @@ class Menu extends CI_Controller
                 'kategori' => $this->input->post('kategori', true)
             ];
 
-            $this->ModelMenu->updateKategori(['id_kategori' => $this->input->post('id_kategori')], $data);
+            $this->ModelMenu->updateKategori(['id' => $this->input->post('id')], $data);
             $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Kategori Berhasil diupdate </div>');
             redirect('menu/kategori');
         }
@@ -143,7 +143,7 @@ class Menu extends CI_Controller
     }
     public function hapusKategori()
     {
-        $where = ['id_kategori' => $this->uri->segment(3)];
+        $where = ['id' => $this->uri->segment(3)];
         $this->ModelMenu->hapusKategori($where);
         redirect('menu/kategori');
     }
@@ -164,10 +164,7 @@ class Menu extends CI_Controller
 
 
         $kategori = $this->ModelMenu->joinKategoriMenu(['menu.id' => $this->uri->segment(3)])->result_array();
-        foreach ($kategori as $k) {
-            $data['id'] = $k['id_kategori'];
-            $data['k'] = $k['id_kategori'];
-        }
+        
 
         $data['kategori'] = $this->ModelMenu->getKategori()->result_array();
 

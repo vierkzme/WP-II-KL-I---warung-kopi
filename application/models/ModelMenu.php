@@ -69,9 +69,9 @@ class ModelMenu extends CI_Model
     //join 
     public function joinKategoriMenu($where)
     {
-        $this->db->select('menu.id_kategori, kategori.id_kategori');
+        $this->db->select('menu.id_kategori, kategori.id');
         $this->db->from('menu');
-        $this->db->join('kategori', 'kategori.id_kategori = menu.id_kategori');
+        $this->db->join('kategori', 'kategori.id = menu.id_kategori');
         $this->db->where($where);
         return $this->db->get();
     }
